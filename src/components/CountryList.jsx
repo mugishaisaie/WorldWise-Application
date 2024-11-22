@@ -4,11 +4,13 @@ import Spinner from './Spinner'
 import CityItem from './CityItem'
 import Message from './Message'
 import CountryItem from './CountryItem'
+import { useCities } from '../Context/CitiesContext'
 
 
 
 
-function CountryList({ cities,isLoading}) {
+function CountryList() {
+  const {cities, isLoading} = useCities();
     console.log(cities)
     // 
     if(isLoading) return <Spinner />
