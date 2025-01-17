@@ -13,7 +13,7 @@ const formatDate = (date) =>
     }).format(new Date(date));
 
 function CityItem({city}) {
-    console.log(city)
+    // console.log(city)
     const {currentCity} = useCities();
    
     const {cityName, emoji, date,id,position } = city;
