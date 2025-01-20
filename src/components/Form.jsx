@@ -10,6 +10,9 @@ import { useUrlPosition } from "../hooks/useUrlPosition";
 import Message from "./Message";
 import Spinner from "./Spinner";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
     .toUpperCase()
@@ -31,7 +34,8 @@ function Form() {
   const [emoji,setEmoji] = useState("");
   const [geoCodingError,setGeoCodingError] = useState("");
 
-useEffect(function(){
+  useEffect(function(){
+  if(!lat && !lng) return;
   async function fetchCityData() { 
     try {
 setIsLoadingGeoCoding(true)
@@ -54,10 +58,28 @@ setEmoji(convertToEmoji(data.countryCode))
   fetchCityData();
 },[lat,lng])
 
+//
+function handleSubmit(e){
+  e.preventDefault();
+  if(!cityName || !date)return;
+
+  const newCity ={
+    cityName,
+    country,
+    emoji,
+    date,
+    notes,
+    position: {lat,lng}
+  }
+console.log(newCity)
+} 
+
+// 
+if(!lat && !lng) return <Message message="Please try to click somewhere onto the Map" />
 if(isLoadingGeoCoding) return <Spinner />
 if(geoCodingError) return <Message message={geoCodingError}/>
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
@@ -70,11 +92,12 @@ if(geoCodingError) return <Message message={geoCodingError}/>
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
+        {/* <input
           id="date"
           onChange={(e) => setDate(e.target.value)}
           value={date}
-        />
+        /> */}
+        <DatePicker id="date" onChange={(date)=>setDate(date)} selected={date} dateFormat='dd/MM/yyyy' placeholderText="Select a Date?"/>
       </div>
 
       <div className={styles.row}>
